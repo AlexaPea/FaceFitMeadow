@@ -5,7 +5,8 @@ import { Camera } from "expo-camera";
 import * as FaceDetector from "expo-face-detector";
 
 
-export default function PlayScreen() {
+
+const PlayScreen = () => {
   const [hasCameraPermission, setHasCameraPermission] = React.useState(null);
   const [faceData, setFaceData] = React.useState();
 
@@ -70,6 +71,8 @@ export default function PlayScreen() {
     </Camera>
   );
 }
+
+export default PlayScreen 
 
 const styles = StyleSheet.create({
   camera: {

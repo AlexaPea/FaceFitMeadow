@@ -1,0 +1,18 @@
+{
+    "database": {
+      "rules": "database.rules.json"
+    },
+    "functions": {
+      "predeploy": [],
+      "source": "functions"
+    },
+    "hosting": {
+      "public": "public",
+      "ignore": []
+    },
+    "firestore": {
+      "rules": "firestore.rules",
+      "indexes": "firestore.indexes.json"
+    }
+  }
+  

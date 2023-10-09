@@ -1,96 +1,131 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import * as React from "react";
-import { Camera } from "expo-camera";
-import * as FaceDetector from "expo-face-detector";
+import { StatusBar } from 'expo-status-bar';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import SplashScreen from './screens/SplashScreen';
+import SplashOptionScreen from './screens/SplashOptionScreen';
+import LoginScreen from './screens/LoginScreen';
+import RegisterScreen from './screens/RegisterScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import HomeTab from './navigators/HomeTab';
+import { useState, useEffect } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './firebase';
+import OnboardingOneScreen from './screens/Onboarding/OnboardingOneScreen';
+import OnboardingTwoScreen from './screens/Onboarding/OnboardingTwoScreen';
+import OnboardingThreeScreen from './screens/Onboarding/OnboardingThreeScreen';
+import OnboardingFourScreen from './screens/Onboarding/OnboardingFourScreen';
+
+
+//for each nav we have, we need to go create it
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [hasCameraPermission, setHasCameraPermission] = React.useState(null);
-  const [faceData, setFaceData] = React.useState();
 
-  React.useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasCameraPermission(status === "granted");
-    })();
-  }, []);
 
-  if (hasCameraPermission === null) {
-    return <View />;
-  }
-  if (hasCameraPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
+  
+  const [loggedIn, setLoggedIn] = useState(false)
 
-  const getFaceDataView = () => {
-    if (faceData?.length === 0) {
-      return (
-        <View style={styles.faces}>
-          <Text>No face detected</Text>
-        </View>
-      );
-    } else {
-      return (
-        <View style={styles.faces}>
-          {faceData?.map((face, index) => {
-            const smilingScore = face.smilingProbability > 0.7;
-            return (
-              <View key={index}>
+  //Check if user is logged in
+  useEffect(() => {
 
-                <Text style={styles.faceDescriptions}>
-                  Smiling: {smilingScore ? "🟢" : "🔴"}
-                </Text>
-              </View>
-            );
-          })}
-        </View>
-      );
-    }
-  };
-  const handleFacesDetected = ({ faces }) => {
-    setFaceData(faces);
-  };
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log("checking if logged In...")
+      if(user){
+        //user is logged in
+        setLoggedIn(true)
+      } else {
+        //user doesn't exist, meaing they are logged out
+        setLoggedIn(false)
+      }
+
+    })
+    return unsubscribe;
+    
+  }, [])
+
+  
+
   return (
-    <Camera
-      style={styles.camera}
-      type={Camera.Constants.Type.front}
-      ratio="16:9"
-      onFacesDetected={(faceData) => handleFacesDetected(faceData)}
-      faceDetectorSettings={{
-        mode: FaceDetector.FaceDetectorMode.accurate,
-        detectLandmarks: FaceDetector.FaceDetectorLandmarks.all,
-        runClassifications: FaceDetector.FaceDetectorClassifications.all,
+    //Root for navigation
+    <NavigationContainer style={styles.nav} theme={navigationTheme}>
+          
+      <Stack.Navigator  initialRouteName='Splash' screenOptions={{headerShown: false}}>
+      {!loggedIn ? (
+        //Show these screens when user isn't logged in
+            <>
+              <Stack.Screen
+              name="Splash"
+              component={SplashScreen} 
+              />
 
-        minDetectionInterval: 100,
-        tracking: true,
-      }}
-    >
-      {getFaceDataView(faceData)}
-    </Camera>
+              <Stack.Screen
+              name="SplashOption"
+              component={SplashOptionScreen} 
+              />
+
+              <Stack.Screen
+              name="Login"
+              component={LoginScreen} 
+              />
+              <Stack.Screen
+              name="Register"
+              component={RegisterScreen} />
+
+              <Stack.Screen
+              name="OnboardingOne"
+              component={OnboardingOneScreen} />
+
+              <Stack.Screen
+              name="OnboardingTwo"
+              component={OnboardingTwoScreen} />
+
+              <Stack.Screen
+              name="OnboardingThree"
+              component={OnboardingThreeScreen} />
+
+              <Stack.Screen
+              name="OnboardingFour"
+              component={OnboardingFourScreen} />
+            </>
+          ):(
+            //Show these screens when user IS logged in
+            <>
+              <Stack.Screen 
+              name="HomeTab" 
+              component={HomeTab}/>
+
+            </>
+
+            
+
+          )}
+
+
+
+      </Stack.Navigator>
+
+    </NavigationContainer>
+   
   );
 }
 
+const navigationTheme = {
+  colors: {
+    background: "transparent",
+  },
+  bg:{
+    backgroundColor: "transparent"
+  }
+};
+
 const styles = StyleSheet.create({
-  camera: {
+  container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  faces: {
-    backgroundColor: "#fff",
-    color: "#000",
-    bottom: 1,
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: 100,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  faceDescriptions: {
-    color: "#000",
-    fontSize: 20,
-    textAlign: "center",
-  },
+  nav:{
+    height:0
+  }
 });
