@@ -14,6 +14,7 @@ import OnboardingOneScreen from './screens/Onboarding/OnboardingOneScreen';
 import OnboardingTwoScreen from './screens/Onboarding/OnboardingTwoScreen';
 import OnboardingThreeScreen from './screens/Onboarding/OnboardingThreeScreen';
 import OnboardingFourScreen from './screens/Onboarding/OnboardingFourScreen';
+import HomeScreen from './screens/HomeScreen';
 
 
 //for each nav we have, we need to go create it
@@ -86,6 +87,7 @@ export default function App() {
               <Stack.Screen
               name="OnboardingFour"
               component={OnboardingFourScreen} />
+
             </>
           ):(
             //Show these screens when user IS logged in
@@ -94,6 +96,9 @@ export default function App() {
               name="HomeTab" 
               component={HomeTab}/>
 
+              <Stack.Screen 
+              name="HomeScreen" 
+              component={HomeScreen}/>
             </>
 
             

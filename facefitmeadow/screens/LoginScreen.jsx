@@ -190,12 +190,12 @@ logo:{
     resizeMode: "contain",
     },
 logoContainer:{
-    marginTop:50,
+    marginTop:55,
     marginLeft:-30,
 },
-    inputContainer:{
+inputContainer:{
     paddingTop: 15,
-    paddingLeft: 30
+    paddingLeft: 45
 },
 input:{
     width: 325,

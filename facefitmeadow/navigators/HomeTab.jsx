@@ -6,6 +6,7 @@ import { getUserRoleFromDatabase } from '../services/firebaseDb';
 import { getCurrentUser } from '../services/firebaseAuth';
 import PlayScreen from '../screens/Play/PlayScreen';
 import ProgressScreen from '../screens/ProgressScreen';
+import HomeScreen from '../screens/HomeScreen';
 
 const HomeTab = () => {
 
@@ -81,7 +82,7 @@ const HomeTab = () => {
 const styles = StyleSheet.create({
   tabBar: {
     position: 'absolute',
-    backgroundColor: '#887654',
+    backgroundColor: '#3E5F2A',
     borderTopWidth: 0,
     height: 82, 
     width: 350, 
@@ -98,11 +99,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   activeIconContainer: {
-    backgroundColor: '#6B8DFF',
+    backgroundColor: '#FFDA73',
   },
   icon: {
-    width: 40,
-    height: 40,
+    width: 35,
+    height: 35,
     tintColor: '#FFFFFF',
   }
 });

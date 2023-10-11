@@ -68,10 +68,10 @@ const styles = StyleSheet.create({
     fontFamily: 'OneStory', 
     fontSize: 40,
     color: '#3E5F2A',
-    width: 330,
+    width: 340,
     textAlign: 'center',
     paddingTop: 70,
-    paddingLeft: 60,
+    paddingLeft: 70,
     lineHeight: 55
   },
   body: {
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     width: 350,
     textAlign: 'center',
-    paddingLeft: 55,
+    paddingLeft: 75,
     paddingTop: 20,
     // fontFamily: 'Open Sans Hebrew'
   },

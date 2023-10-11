@@ -52,10 +52,11 @@ const styles = StyleSheet.create({
       resizeMode: 'cover', // or 'stretch' to stretch the image
       alignContent: 'center'
     },
-  
-      logo:{
-        marginTop:300,
-        //marginLeft:60
-      }
+    logo:{
+        width: 497,  // Set your desired width
+        height: 290, // Set your desired height
+        marginLeft:-30,
+        marginTop: 270
+    }
   });
   
