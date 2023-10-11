@@ -6,7 +6,7 @@ import * as FaceDetector from "expo-face-detector";
 import Bird from '../../components/Bird'
 import Obstacles from '../../components/Obstacles'
 
-export default function GameWithCamera() {
+export default function GameWithCamera({navigation}) {
   const [isPlaying, setIsPlaying] = useState(true);
   const screenWidth = Dimensions.get("screen").width;
   const screenHeight = Dimensions.get("screen").height;
@@ -154,12 +154,32 @@ export default function GameWithCamera() {
         >
           <Text style={styles.scoreText}>Current Score:</Text>
           <Text style={styles.score}>{score}</Text>
-                    {/* Render a "Restart" button when the game is over */}
-                    {!isPlaying && (
-            <TouchableOpacity onPress={restartGame} style={styles.restartButton}>
-              <Text style={styles.restartButtonText}>Restart</Text>
-            </TouchableOpacity>
+
+            {/* Render a "Restart" button when the game is over */}
+            {!isPlaying && (
+              <View style={styles.restartContainer}>
+                <ImageBackground
+                  source={require('../../assets/Container/restart.png')}
+                  style={styles.restartContainerBackground}
+                >
+                  <Text style={styles.heading1}>Restart</Text>
+                  <View style={styles.button}>
+                    <TouchableOpacity onPress={restartGame} >
+                      <ImageBackground source={require('../../assets/button.png')} style={styles.btnBackground}>
+                        <Text style={styles.btnText}>Let's Play!</Text>
+                      </ImageBackground>
+                    </TouchableOpacity>
+                  </View>
+
+                  <View style={styles.buttonSecondary}>
+                    <TouchableOpacity  onPress={() => navigation.navigate('HomeScreen')}>
+                      <Text style={styles.btnTextSecondary}>Home</Text>
+                    </TouchableOpacity>
+                  </View>
+                </ImageBackground>
+              </View>
           )}
+
           <Bird birdBottom={birdBottom} birdLeft={birdLeft} />
           <Obstacles
             obstacleWidth={obstacleWidth}
@@ -216,17 +236,67 @@ const styles = StyleSheet.create({
     marginTop: 150,
     zIndex: 1,
   },
-  restartButton: {
-    position: 'absolute',
-    alignSelf: 'center',
-    backgroundColor: '#3E5F2A',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
+  restartContainer:{
+    width: 399,
+    height: 216,
     zIndex: 99,
+    marginLeft: -15,
+    marginTop: 320,
+    position: "absolute",
   },
-  restartButtonText: {
+  restartContainerBackground:{
+    width: 399,
+    height: 216,
+  },
+  button: {
+    width: 132,
+    height: 53,
+    marginTop: 10,
+    marginLeft: 110, // Adjust this value for spacing
+  },
+  buttonSecondary: {
+    width: 50,
+    color: "#3E5F2A",
+    height: 69,
+    borderRadius: 20,
+    marginTop:-50,
+    marginLeft:130,
+  },
+  btnBackground:{
+    resizeMode: 'contain',
+    width: 135,
+    height: 53,
+    borderRadius: 20,
+    padding:5,
+    alignItems: 'center',
+  },
+  btnText:{
+    fontFamily: 'OneStory', 
+    fontSize: 22,
     color: 'white',
-    fontSize: 20,
+    width: 350,
+    textAlign: 'center',
+    alignItems: 'center',
+    paddingTop:8,
   },
+  btnTextSecondary:{
+      fontFamily: 'OneStory', 
+      fontSize: 24,
+      color: '#3E5F2A',
+      width: 350,
+      textAlign: 'center',
+      alignItems: 'center',
+      paddingTop:8,
+    },
+    heading1: {
+      fontFamily: 'OneStory',
+      fontSize: 48,
+      color: '#3E5F2A',
+      width: 350,
+      paddingTop: 50,
+      paddingLeft: 160,
+      lineHeight: 50,
+      alignItems:'center',
+      justifyContent: 'center'
+    },
 });

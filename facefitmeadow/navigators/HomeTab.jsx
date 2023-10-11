@@ -7,6 +7,7 @@ import { getCurrentUser } from '../services/firebaseAuth';
 import PlayScreen from '../screens/Play/PlayScreen';
 import ProgressScreen from '../screens/ProgressScreen';
 import HomeScreen from '../screens/HomeScreen';
+import GameWithCamera from '../screens/Play/PlayScreen';
 
 const HomeTab = () => {
 
@@ -50,8 +51,8 @@ const HomeTab = () => {
         }}
       />
       <Tab.Screen
-        name="Play"
-        component={PlayScreen}
+        name="Game"
+        component={GameWithCamera}
         options={{
           tabBarIcon: ({ focused }) => (
             <CustomTabBarIcon
