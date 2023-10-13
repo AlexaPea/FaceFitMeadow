@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
   },
   feeling:{
     fontSize: 64,
-    fontFamily: 'FuzzyBubbles-Regular',
+    fontFamily: 'FuzzyBubbles-Bold',
     color: '#3E5F2A', 
     alignItems:'center',
     marginBottom: 70

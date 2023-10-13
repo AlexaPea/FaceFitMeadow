@@ -23,25 +23,29 @@ const LoginScreen = ({ navigation }) => {
   //input state values
       const  [email, setEmail] = useState('');
       const  [password, setPassword] = useState('');
-  
-  
       const  [loading, setLoading] = useState(false);
   
 
       //logon function
       const logOn = async () => {
-        if(!email || !password){
-            //warning alert
-            Alert.alert("Try again", "Please fill in your email and password.",[
-                {text: 'Try Again', onPress: () => {setLoading(false)}}
-              ])
-        }else{
-            setLoading(true)
-            await signInUser(email,password)
-          
-         
+        if (!email || !password) {
+          // Warning alert
+          Alert.alert("Try again", "Please fill in your email and password.", [
+            { text: 'Try Again', onPress: () => setLoading(false) }
+          ]);
+        } else {
+          setLoading(true);
+          try {
+            await signInUser(email, password);
+            // Successful login, navigate to the "home" tab
+            //navigation.navigate('HomeTab'); // Replace 'Home' with the actual name of your "home" tab
+          } catch (error) {
+            console.error('Login error:', error);
+            // Handle login error
+            // You can show an error message to the user
+          }
         }
-    }
+      };
 
   // return the rendering of views
   return (

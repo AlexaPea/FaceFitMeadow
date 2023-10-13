@@ -79,6 +79,10 @@ export default function App() {
             //Show these screens when user IS logged in
             <>
 
+              <Stack.Screen 
+              name="HomeTab" 
+              component={HomeTab}/>
+              
               <Stack.Screen
               name="OnboardingOne"
               component={OnboardingOneScreen} />
@@ -94,9 +98,7 @@ export default function App() {
               <Stack.Screen
               name="OnboardingFour"
               component={OnboardingFourScreen} />
-              <Stack.Screen 
-              name="HomeTab" 
-              component={HomeTab}/>
+
 
               <Stack.Screen 
               name="HomeScreen" 
