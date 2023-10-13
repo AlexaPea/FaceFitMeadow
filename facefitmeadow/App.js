@@ -15,6 +15,8 @@ import OnboardingTwoScreen from './screens/Onboarding/OnboardingTwoScreen';
 import OnboardingThreeScreen from './screens/Onboarding/OnboardingThreeScreen';
 import OnboardingFourScreen from './screens/Onboarding/OnboardingFourScreen';
 import HomeScreen from './screens/HomeScreen';
+import InstructionScreen from './screens/Play/InstructionScreen';
+import GameWithCamera from './screens/Play/GameWithCamera';
 
 
 //for each nav we have, we need to go create it
@@ -82,7 +84,7 @@ export default function App() {
               <Stack.Screen 
               name="HomeTab" 
               component={HomeTab}/>
-              
+
               <Stack.Screen
               name="OnboardingOne"
               component={OnboardingOneScreen} />
@@ -103,6 +105,14 @@ export default function App() {
               <Stack.Screen 
               name="HomeScreen" 
               component={HomeScreen}/>
+
+              <Stack.Screen 
+              name="InstructionScreen" 
+              component={InstructionScreen}/>
+
+              <Stack.Screen 
+              name="GameWithCamera" 
+              component={GameWithCamera}/>
             </>
 
             

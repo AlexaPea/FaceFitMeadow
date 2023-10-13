@@ -6,7 +6,7 @@ import { getCurrentUser } from '../../services/firebaseAuth';
 import { getUserRoleFromDatabase } from '../../services/firebaseDb';
 
 
-const HomeScreen = ({ navigation }) => {
+const PlayScreen = ({ navigation }) => {
   const [fontLoaded, setFontLoaded] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const user = getCurrentUser();
@@ -63,7 +63,8 @@ const HomeScreen = ({ navigation }) => {
                 >
                     <Text style={styles.subHeading2}>Flight Risk</Text>
                     <Text style={styles.text2}>Let’s go an adventure through FaceFit Meadow!</Text>
-                    <TouchableOpacity style={styles.button} >
+                    <TouchableOpacity style={styles.button}
+                    onPress={() => navigation.navigate('InstructionScreen')} >
                     <ImageBackground source={require('../../assets/button.png')} style={styles.btnBackground}>
                         <Text style={styles.btnText}>Let's Play!</Text>
                     </ImageBackground>
@@ -271,7 +272,7 @@ const styles = StyleSheet.create({
   },
 
   score: {
-    fontSize: 50,
+    fontSize: 50, 
     color: '#3E5F2A',
     fontWeight: '600',
     textAlign: 'right',
@@ -292,4 +293,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default HomeScreen;
+export default PlayScreen;
