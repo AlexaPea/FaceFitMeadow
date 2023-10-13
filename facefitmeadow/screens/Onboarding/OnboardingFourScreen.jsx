@@ -4,12 +4,13 @@ import React, { useState } from 'react'
 import * as Font from 'expo-font';
 
 
-const OnboardingFourScreen = ({ navigation }) => {
+const OnboardingFourScreen = ({ navigation, route }) => {
   const [fontLoaded, setFontLoaded] = useState(false);
 
   const loadFonts = async () => {
     await Font.loadAsync({
-      'OneStory': require('../../assets/fonts/OneStory.otf'),
+      'FuzzyBubbles-Regular': require('../../assets/fonts/FuzzyBubbles-Regular.ttf'),
+      'FuzzyBubbles-Bold': require('../../assets/fonts/FuzzyBubbles-Bold.ttf'),
     });
     setFontLoaded(true);
   };
@@ -42,10 +43,10 @@ const OnboardingFourScreen = ({ navigation }) => {
 
       {fontLoaded ? (
         <>
-        <Text style={styles.heading}>Join Us on a Special Mission!</Text>
+        <Text style={styles.heading}>Join Us on a <Text style={styles.boldText}>Special Mission!</Text></Text>
         <Text style={styles.body}>Our mission: Make therapy fun with FaceFit Play, turning exercises into a delightful adventure. Let's have a blast together!</Text>
 
-        <TouchableOpacity style={styles.button}   onPress={() => navigation.navigate('HomeScreen')}>
+        <TouchableOpacity style={styles.button}   onPress={() => navigation.navigate('HomeTab')}>
           <ImageBackground source={require('../../assets/button2.png')} style={styles.btnBackground}>
             <Text style={styles.btnText}>Let's Go!</Text>
           </ImageBackground>
@@ -70,14 +71,19 @@ const styles = StyleSheet.create({
     resizeMode: 'contain', // or 'stretch' to stretch the image
   },
   heading: {
-    fontFamily: 'OneStory', 
-    fontSize: 40,
+    fontFamily: 'FuzzyBubbles-Regular', 
+    fontSize: 34,
     color: '#3E5F2A',
-    width: 330,
+    width: 380,
     textAlign: 'center',
     paddingTop: 70,
-    paddingLeft: 60,
-    lineHeight: 55
+    paddingLeft: 30,
+    lineHeight: 50
+  },
+  boldText: {
+    fontFamily: 'FuzzyBubbles-Bold',
+    fontSize: 34,
+    color: '#3E5F2A',
   },
   body: {
     color: '#3E5F2A',
@@ -116,17 +122,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   btnText:{
-    fontFamily: 'OneStory', 
-    fontSize: 22,
+    fontFamily: 'FuzzyBubbles-Regular', 
+    fontSize: 16,
     color: 'white',
-    width: 70,
+    width: 50,
     textAlign: 'center',
     alignItems: 'center',
-    paddingTop:10,
-    lineHeight: 20
+    paddingTop:2,
   },
   btnTextSecondary:{
-      fontFamily: 'OneStory', 
+      fontFamily: 'FuzzyBubbles-Regular', 
       fontSize: 24,
       color: '#3E5F2A',
       width: 350,

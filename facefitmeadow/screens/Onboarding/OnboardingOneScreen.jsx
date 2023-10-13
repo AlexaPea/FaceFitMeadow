@@ -9,7 +9,8 @@ const OnboardingOneScreen = ({ navigation }) => {
 
   const loadFonts = async () => {
     await Font.loadAsync({
-      'OneStory': require('../../assets/fonts/OneStory.otf'),
+      'FuzzyBubbles-Regular': require('../../assets/fonts/FuzzyBubbles-Regular.ttf'),
+      'FuzzyBubbles-Bold': require('../../assets/fonts/FuzzyBubbles-Bold.ttf'),
     });
     setFontLoaded(true);
   };
@@ -42,7 +43,7 @@ const OnboardingOneScreen = ({ navigation }) => {
 
       {fontLoaded ? (
         <>
-        <Text style={styles.heading}>Hi, I'm Spot!</Text>
+        <Text style={styles.heading}>Hi, <Text style={styles.boldText}>I'm Spot!</Text></Text>
         <Text style={styles.body}>Hi, I'm Spot, your Giggly pet! Let's explore how to take care of me and have fun with this app.</Text>
 
         <TouchableOpacity style={styles.button}   onPress={() => navigation.navigate('OnboardingTwo')}>
@@ -71,14 +72,19 @@ const styles = StyleSheet.create({
     alignContent: 'center'
   },
   heading: {
-    fontFamily: 'OneStory', 
-    fontSize: 40,
+    fontFamily: 'FuzzyBubbles-Regular', 
+    fontSize: 34,
     color: '#3E5F2A',
-    width: 330,
+    width: 340,
     textAlign: 'center',
-    paddingTop: 70,
-    paddingLeft: 60,
-    lineHeight: 55
+    paddingTop: 60,
+    paddingLeft: 70,
+    lineHeight: 50
+  },
+  boldText: {
+    fontFamily: 'FuzzyBubbles-Bold',
+    fontSize: 34,
+    color: '#3E5F2A',
   },
   body: {
     color: '#3E5F2A',
@@ -117,16 +123,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   btnText:{
-    fontFamily: 'OneStory', 
-    fontSize: 22,
+    fontFamily: 'FuzzyBubbles-Regular', 
+    fontSize: 16,
     color: 'white',
     width: 350,
     textAlign: 'center',
     alignItems: 'center',
-    paddingTop:15,
+    paddingTop:12,
   },
   btnTextSecondary:{
-      fontFamily: 'OneStory', 
+      fontFamily: 'FuzzyBubbles-Regular', 
       fontSize: 24,
       color: '#3E5F2A',
       width: 350,

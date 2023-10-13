@@ -8,7 +8,8 @@ const SplashScreen = ({ navigation }) => {
 
     const loadFonts = async () => {
       await Font.loadAsync({
-        'OneStory': require('../assets/fonts/OneStory.otf'),
+        'FuzzyBubbles-Regular': require('../assets/fonts/FuzzyBubbles-Regular.ttf'),
+        'FuzzyBubbles-Bold': require('../assets/fonts/FuzzyBubbles-Bold.ttf'),
       });
       setFontLoaded(true);
     };

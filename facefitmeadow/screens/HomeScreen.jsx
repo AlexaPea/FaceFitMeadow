@@ -15,7 +15,8 @@ const HomeScreen = ({ navigation }) => {
 
   const loadFonts = async () => {
     await Font.loadAsync({
-      'OneStory': require('../assets/fonts/OneStory.otf'),
+      'FuzzyBubbles-Regular': require('../assets/fonts/FuzzyBubbles-Regular.ttf'),
+      'FuzzyBubbles-Bold': require('../assets/fonts/FuzzyBubbles-Bold.ttf'),
     });
     setFontLoaded(true);
   };
@@ -119,8 +120,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   heading1: {
-    fontFamily: 'OneStory',
-    fontSize: 48,
+    fontFamily: 'FuzzyBubbles-Bold',
+    fontSize: 42,
     color: '#3E5F2A',
     width: 350,
     paddingTop: 0,
@@ -131,8 +132,8 @@ const styles = StyleSheet.create({
   
   },
   heading2: {
-    fontFamily: 'OneStory',
-    fontSize: 32,
+    fontFamily: 'FuzzyBubbles-Regular',
+    fontSize: 28,
     color: '#3E5F2A',
     width: 350,
     paddingTop: 65,
@@ -168,13 +169,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   btnText:{
-    fontFamily: 'OneStory', 
-    fontSize: 20,
+    fontFamily: 'FuzzyBubbles-Regular', 
+    fontSize: 18,
     color: 'white',
     width: 350,
     textAlign: 'center',
     alignItems: 'center',
-    paddingTop:10,
+    paddingTop:8,
   },
   body: {
     color: '#3E5F2A',
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
     width: 40,
   },
   compText:{
-    fontFamily: 'OneStory',
+    fontFamily: 'FuzzyBubbles-Regular',
     fontSize: 32,
     color: '#3E5F2A',
     paddingTop: 10,
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
     color: '#3E5F2A',
     paddingTop: 15,
     paddingLeft: 40,
-    fontFamily: 'OneStory',
+    fontFamily: 'FuzzyBubbles-Regular',
   },
   iconContainer:{
     position:'absolute',
@@ -233,14 +234,14 @@ const styles = StyleSheet.create({
   },
   feeling:{
     fontSize: 64,
-    fontFamily: 'OneStory',
+    fontFamily: 'FuzzyBubbles-Regular',
     color: '#3E5F2A', 
     alignItems:'center',
     marginBottom: 70
   },
   subHeading:{
-    fontSize: 32,
-    fontFamily: 'OneStory',
+    fontSize: 26,
+    fontFamily: 'FuzzyBubbles-Bold',
     color: '#3E5F2A', 
     alignItems:'center',
     textAlign: 'center',
@@ -248,8 +249,8 @@ const styles = StyleSheet.create({
     marginLeft: 35
   },
   subHeading2:{
-    fontSize: 32,
-    fontFamily: 'OneStory',
+    fontSize: 26,
+    fontFamily: 'FuzzyBubbles-Bold',
     color: '#3E5F2A', 
     alignItems:'center',
     textAlign: 'center',

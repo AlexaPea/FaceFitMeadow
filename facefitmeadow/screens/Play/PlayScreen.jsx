@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     zIndex: 99,
   },
   score: {
-    fontFamily: 'OneStory',
+    fontFamily: 'FuzzyBubbles-Regular',
     fontSize: 64,
     color: '#3E5F2A',
     width: 350,
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   btnText:{
-    fontFamily: 'OneStory', 
+    fontFamily: 'FuzzyBubbles-Regular', 
     fontSize: 22,
     color: 'white',
     width: 350,
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     paddingTop:8,
   },
   btnTextSecondary:{
-      fontFamily: 'OneStory', 
+      fontFamily: 'FuzzyBubbles-Regular', 
       fontSize: 24,
       color: '#3E5F2A',
       width: 350,
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
       paddingTop:8,
     },
     heading1: {
-      fontFamily: 'OneStory',
+      fontFamily: 'FuzzyBubbles-Regular',
       fontSize: 48,
       color: '#3E5F2A',
       width: 350,

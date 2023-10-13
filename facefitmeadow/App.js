@@ -72,6 +72,13 @@ export default function App() {
               name="Register"
               component={RegisterScreen} />
 
+
+
+            </>
+          ):(
+            //Show these screens when user IS logged in
+            <>
+
               <Stack.Screen
               name="OnboardingOne"
               component={OnboardingOneScreen} />
@@ -87,11 +94,6 @@ export default function App() {
               <Stack.Screen
               name="OnboardingFour"
               component={OnboardingFourScreen} />
-
-            </>
-          ):(
-            //Show these screens when user IS logged in
-            <>
               <Stack.Screen 
               name="HomeTab" 
               component={HomeTab}/>

@@ -9,7 +9,8 @@ const SplashOptionScreen = ({ navigation }) => {
 
   const loadFonts = async () => {
     await Font.loadAsync({
-      'OneStory': require('../assets/fonts/OneStory.otf'),
+      'FuzzyBubbles-Regular': require('../assets/fonts/FuzzyBubbles-Regular.ttf'),
+      'FuzzyBubbles-Bold': require('../assets/fonts/FuzzyBubbles-Bold.ttf'),
     });
     setFontLoaded(true);
   };
@@ -33,7 +34,9 @@ const SplashOptionScreen = ({ navigation }) => {
         </View>
       {fontLoaded ? (
         <>
-        <Text style={styles.heading}>Lets Have Some Fun!</Text>
+        <Text style={styles.heading}>
+          Lets Have <Text style={styles.boldText}>Some Fun!</Text>
+        </Text>
         <Text style={styles.body}>Let’s get those muscles moving and make your pet happy!</Text>
 
         <TouchableOpacity style={styles.button}   onPress={() => navigation.navigate('Login')}>
@@ -65,14 +68,19 @@ const styles = StyleSheet.create({
     alignContent: 'center'
   },
   heading: {
-    fontFamily: 'OneStory', 
-    fontSize: 40,
+    fontFamily: 'FuzzyBubbles-Regular', 
+    fontSize: 34,
     color: '#3E5F2A',
     width: 340,
     textAlign: 'center',
     paddingTop: 70,
     paddingLeft: 70,
-    lineHeight: 55
+    lineHeight: 50
+  },
+  boldText: {
+    fontFamily: 'FuzzyBubbles-Bold',
+    fontSize: 34,
+    color: '#3E5F2A',
   },
   body: {
     color: '#3E5F2A',
@@ -88,7 +96,7 @@ const styles = StyleSheet.create({
     height: 69,
     borderRadius: 20,
     flex: 1,
-    paddingTop:40,
+    paddingTop:50,
     paddingLeft:200,
     alignItems: 'center',
   },
@@ -98,7 +106,7 @@ const styles = StyleSheet.create({
     height: 69,
     borderRadius: 20,
     flex: 1,
-    marginTop:-10,
+    marginTop:-30,
     paddingLeft:110,
     alignItems: 'center',
   },
@@ -111,17 +119,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   btnText:{
-    fontFamily: 'OneStory', 
-    fontSize: 24,
+    fontFamily: 'FuzzyBubbles-Regular', 
+    fontSize: 20,
     color: 'white',
     width: 350,
     textAlign: 'center',
     alignItems: 'center',
-    paddingTop:8,
+    paddingTop:5,
   },
   btnTextSecondary:{
-      fontFamily: 'OneStory', 
-      fontSize: 24,
+      fontFamily: 'FuzzyBubbles-Regular', 
+      fontSize: 20,
       color: '#3E5F2A',
       width: 350,
       textAlign: 'center',

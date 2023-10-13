@@ -9,7 +9,8 @@ const OnboardingOneScreen = ({ navigation }) => {
 
   const loadFonts = async () => {
     await Font.loadAsync({
-      'OneStory': require('../../assets/fonts/OneStory.otf'),
+      'FuzzyBubbles-Regular': require('../../assets/fonts/FuzzyBubbles-Regular.ttf'),
+      'FuzzyBubbles-Bold': require('../../assets/fonts/FuzzyBubbles-Bold.ttf'),
     });
     setFontLoaded(true);
   };
@@ -42,7 +43,7 @@ const OnboardingOneScreen = ({ navigation }) => {
 
       {fontLoaded ? (
         <>
-        <Text style={styles.heading}>Let's Track Our Progress!</Text>
+        <Text style={styles.heading}>Let's Track Our <Text style={styles.boldText}>Progress!</Text></Text>
         <Text style={styles.body}>We'll keep track of our adventures and progress. Watch our scores rise, and you'll see us both thrive!</Text>
 
         <TouchableOpacity style={styles.button}   onPress={() => navigation.navigate('OnboardingFour')}>
@@ -70,14 +71,19 @@ const styles = StyleSheet.create({
     resizeMode: 'contain', // or 'stretch' to stretch the image
   },
   heading: {
-    fontFamily: 'OneStory', 
-    fontSize: 40,
+    fontFamily: 'FuzzyBubbles-Regular', 
+    fontSize: 34,
     color: '#3E5F2A',
-    width: 330,
+    width: 380,
     textAlign: 'center',
-    paddingTop: 70,
-    paddingLeft: 60,
-    lineHeight: 55
+    paddingTop: 85,
+    paddingLeft: 20,
+    lineHeight: 50
+  },
+  boldText: {
+    fontFamily: 'FuzzyBubbles-Bold',
+    fontSize: 34,
+    color: '#3E5F2A',
   },
   body: {
     color: '#3E5F2A',
@@ -116,16 +122,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   btnText:{
-    fontFamily: 'OneStory', 
-    fontSize: 22,
+    fontFamily: 'FuzzyBubbles-Regular', 
+    fontSize: 16,
     color: 'white',
     width: 350,
     textAlign: 'center',
     alignItems: 'center',
-    paddingTop:15,
+    paddingTop:12,
   },
   btnTextSecondary:{
-      fontFamily: 'OneStory', 
+      fontFamily: 'FuzzyBubbles-Regular', 
       fontSize: 24,
       color: '#3E5F2A',
       width: 350,

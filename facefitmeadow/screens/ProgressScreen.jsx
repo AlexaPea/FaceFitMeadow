@@ -14,7 +14,8 @@ const ProgressScreen = ({ navigation }) => {
 
   const loadFonts = async () => {
     await Font.loadAsync({
-      'OneStory': require('../assets/fonts/OneStory.otf'),
+      'FuzzyBubbles-Regular': require('../assets/fonts/FuzzyBubbles-Regular.ttf'),
+      'FuzzyBubbles-Bold': require('../assets/fonts/FuzzyBubbles-Bold.ttf'),
     });
     setFontLoaded(true);
   };
@@ -45,7 +46,7 @@ const ProgressScreen = ({ navigation }) => {
     >
       {fontLoaded ? (
         <>
-          <Text style={styles.heading2}>Track Our</Text>
+          <Text style={styles.heading2}>Track Your</Text>
           <Text style={styles.heading1}>Progress!</Text>
           <Text style={styles.body}>Time to take a look at our mission progress!</Text>
           <View style={styles.tinyContainerRow}>
@@ -91,8 +92,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   heading1: {
-    fontFamily: 'OneStory',
-    fontSize: 48,
+    fontFamily: 'FuzzyBubbles-Bold',
+    fontSize: 42,
     color: '#3E5F2A',
     width: 350,
     paddingTop: 0,
@@ -102,8 +103,8 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 2, height: 2 },
   },
   heading2: {
-    fontFamily: 'OneStory',
-    fontSize: 32,
+    fontFamily: 'FuzzyBubbles-Regular',
+    fontSize: 28,
     color: '#3E5F2A',
     width: 350,
     paddingTop: 65,
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   btnText:{
-    fontFamily: 'OneStory', 
+    fontFamily: 'FuzzyBubbles-Regular', 
     fontSize: 20,
     color: 'white',
     width: 350,
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
     width: 40,
   },
   compText:{
-    fontFamily: 'OneStory',
+    fontFamily: 'FuzzyBubbles-Regular',
     fontSize: 32,
     color: '#3E5F2A',
     paddingTop: 10,
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
     color: '#3E5F2A',
     paddingTop: 15,
     paddingLeft: 40,
-    fontFamily: 'OneStory',
+    fontFamily: 'FuzzyBubbles-Regular',
   },
   iconContainer:{
     position:'absolute',
@@ -188,43 +189,22 @@ const styles = StyleSheet.create({
     width: 360,
     height: 479
   },
-  spotIsland:{
-    marginTop:-100
-  },
-  feelingContainer:{
-    alignItems:'center',
-    justifyContent:'center'
-  },
-  feelingText:{
-    fontSize: 16,
-    color: '#3E5F2A',
-    fontWeight: '800',
-    alignItems:'center',
-    marginTop: -30
-  },
-  feeling:{
-    fontSize: 64,
-    fontFamily: 'OneStory',
-    color: '#3E5F2A', 
-    alignItems:'center',
-    marginBottom: 70
-  },
   subHeading:{
-    fontSize: 32,
-    fontFamily: 'OneStory',
+    fontSize: 28,
+    fontFamily: 'FuzzyBubbles-Bold',
     color: '#3E5F2A', 
     alignItems:'center',
     textAlign: 'center',
-    paddingTop: 5,
+    paddingTop: 0,
     marginLeft: -20
   },
   subHeading2:{
-    fontSize: 32,
-    fontFamily: 'OneStory',
+    fontSize: 28,
+    fontFamily: 'FuzzyBubbles-Bold',
     color: '#3E5F2A', 
     alignItems:'center',
     textAlign: 'center',
-    paddingTop: 5,
+    paddingTop: 0,
     marginLeft: -120
   },
   tinyContainerRow: {
@@ -290,19 +270,19 @@ const styles = StyleSheet.create({
     marginLeft: -90
   },
   trophyImage: {
-    width: 35, // Set the size of the trophy image
-    height: 35,  
+    width: 33, // Set the size of the trophy image
+    height: 33,  
     marginLeft: -20
   },
   streakImage: {
-    width: 35, // Set the size of the trophy image
-    height: 35,  
+    width: 30, // Set the size of the trophy image
+    height: 30,  
     marginLeft: 40,
     marginTop: 20,
   },
   mission: {
-    fontFamily: 'OneStory',
-    fontSize: 32,
+    fontFamily: 'FuzzyBubbles-Bold',
+    fontSize: 28,
     color: '#3E5F2A',
     width: 350,
     paddingTop: 70,

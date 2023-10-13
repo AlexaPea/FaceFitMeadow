@@ -10,7 +10,8 @@ const LoginScreen = ({ navigation }) => {
 
   const loadFonts = async () => {
     await Font.loadAsync({
-      'OneStory': require('../assets/fonts/OneStory.otf'),
+      'FuzzyBubbles-Regular': require('../assets/fonts/FuzzyBubbles-Regular.ttf'),
+      'FuzzyBubbles-Bold': require('../assets/fonts/FuzzyBubbles-Bold.ttf'),
     });
     setFontLoaded(true);
   };
@@ -129,33 +130,37 @@ const styles = StyleSheet.create({
     alignContent: 'center',   
   },
   heading: {
-    fontFamily: 'OneStory', 
-    fontSize: 40,
+    fontFamily: 'FuzzyBubbles-Regular', 
+    fontSize: 34,
     color: '#3E5F2A',
-    width: 330,
+    width: 340,
     textAlign: 'center',
-    paddingTop: 40,
-    paddingLeft: 95,
-    lineHeight: 55
+    paddingTop: 35,
+    paddingLeft: 70,
+    lineHeight: 50
+  },
+  boldText: {
+    fontFamily: 'FuzzyBubbles-Bold',
+    fontSize: 34,
+    color: '#3E5F2A',
   },
   body: {
     color: '#3E5F2A',
     fontSize: 16,
-    width: 320,
+    width: 350,
     textAlign: 'center',
-    paddingLeft: 95,
-    paddingTop: 10,
+    paddingLeft: 75,
+    paddingTop: 20,
     paddingBottom: 20,
-    // fontFamily: 'Open Sans Hebrew'
   },
   button: {
-    width: 197,
-    height: 61,
+    width: 195,
+    height: 69,
+    borderRadius: 20,
     flex: 1,
-    paddingTop: 20,
-    justifyContent: 'center', // Center the content horizontally
-    alignItems: 'center', // Center the content vertically
-    marginLeft: 110
+    paddingTop:10,
+    paddingLeft:200,
+    alignItems: 'center',
   },
   buttonSecondary: {
     width: 307,
@@ -163,26 +168,26 @@ const styles = StyleSheet.create({
     height: 69,
     borderRadius: 20,
     flex: 1,
-    marginTop:-10,
+    marginTop:-20,
     paddingLeft:110,
     alignItems: 'center',
   },
   btnBackground:{
     resizeMode: 'cover', 
-    width: 197,
+    width: 195,
     height: 61,
     borderRadius: 20,
     padding:5,
     alignItems: 'center',
   },
   btnText:{
-    fontFamily: 'OneStory', 
-    fontSize: 24,
+    fontFamily: 'FuzzyBubbles-Regular', 
+    fontSize: 20,
     color: 'white',
     width: 350,
     textAlign: 'center',
     alignItems: 'center',
-    paddingTop:8,
+    paddingTop:5,
   },
 logo:{
     width: 497,  // Set your desired width
@@ -200,7 +205,7 @@ inputContainer:{
 input:{
     width: 325,
     height: 60,   
-    borderWidth: 4,
+    borderWidth: 3,
     borderColor: '#3E5F2A',
     borderRadius: 20,
     paddingLeft: 20,
