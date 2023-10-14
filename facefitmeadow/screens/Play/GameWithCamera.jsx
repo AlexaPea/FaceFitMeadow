@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Dimensions, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import { Camera } from "expo-camera";
 import * as FaceDetector from "expo-face-detector";
+import { addScoreToCollection } from '../../services/firebaseDb';
+import { getCurrentUser } from '../../services/firebaseAuth';
 
 import Bird from '../../components/Bird'
 import Obstacles from '../../components/Obstacles'
@@ -29,6 +31,7 @@ export default function GameWithCamera({navigation}) {
     //function to restart the game
     const restartGame = () => {
       // Reset all game-related states
+      createScoreData()
       setBirdBottom(screenHeight / 2);
       setObstaclesLeft(screenWidth);
       setObstaclesLeftTwo(screenWidth + screenWidth / 2 + 30);
@@ -40,6 +43,11 @@ export default function GameWithCamera({navigation}) {
       // Start the game again
       setIsPlaying(true);
     };
+
+    const GoBack = () => {
+      createScoreData();
+      navigation.navigate('HomeTab');
+    }
 
   // Start bird falling
   useEffect(() => {
@@ -96,9 +104,9 @@ export default function GameWithCamera({navigation}) {
 
     //check for collisions
     useEffect(() => {
-      console.log(obstaclesLeft)
-      console.log(screenWidth/2)
-      console.log(obstaclesLeft > screenWidth/2)
+      //console.log(obstaclesLeft)
+      //console.log(screenWidth/2)
+      //console.log(obstaclesLeft > screenWidth/2)
       if (
         ((birdBottom < (obstaclesNegHeight + obstacleHeight + 30) ||
         birdBottom > (obstaclesNegHeight + obstacleHeight + gap -30)) &&
@@ -123,6 +131,35 @@ export default function GameWithCamera({navigation}) {
       clearInterval(obstaclesTimerIdTwo)
       setIsGameOver(true)
     }
+
+    const createScoreData = async () => {
+      if (score > 0) {
+        var creatorInfo = getCurrentUser();
+        console.log(creatorInfo);
+    
+        // Get the current date and time
+        const currentDate = new Date().toJSON();
+    
+        var ScoreData = {
+          score: score,
+          userId: creatorInfo.uid,
+          date: currentDate, // Add the date field
+        };
+    
+        console.log(ScoreData);
+    
+        const success = await addScoreToCollection(ScoreData);
+    
+        if (success) {
+          console.log("Added score successfully");
+        } else {
+          console.log("Did not add score");
+        }
+      } else {
+        Alert.alert("Oops! Please add all the score info");
+      }
+    };
+    
   
 
     const handleFacesDetected = ({ faces }) => {
@@ -169,18 +206,18 @@ export default function GameWithCamera({navigation}) {
               </View>
 
               <View style={styles.button}>
-                    <TouchableOpacity onPress={restartGame} >
-                      <ImageBackground source={require('../../assets/button.png')} style={styles.btnBackground}>
-                        <Text style={styles.btnText}>Play Again</Text>
-                      </ImageBackground>
-                    </TouchableOpacity>
-                  </View>
+                <TouchableOpacity onPress={restartGame} >
+                  <ImageBackground source={require('../../assets/button.png')} style={styles.btnBackground}>
+                    <Text style={styles.btnText}>Play Again</Text>
+                  </ImageBackground>
+                </TouchableOpacity>
+              </View>
 
-                  <View style={styles.buttonSecondary}>
-                    <TouchableOpacity  onPress={() => navigation.navigate('HomeTab')}>
-                      <Text style={styles.btnTextSecondary}>Home</Text>
-                    </TouchableOpacity>
-                  </View>
+              <View style={styles.buttonSecondary}>
+                <TouchableOpacity  onPress={GoBack}>
+                  <Text style={styles.btnTextSecondary}>Home</Text>
+                </TouchableOpacity>
+              </View>
               </>
           )}
 

@@ -93,7 +93,8 @@ const HomeScreen = ({ navigation }) => {
                 >
                     <Text style={styles.subHeading2}>It’s Playtime!</Text>
                     <Text style={styles.text2}>Time for some fun and bonding with your virtual pet! Playtime is the key to keeping your pet happy and healthy. </Text>
-                    <TouchableOpacity style={styles.button} >
+                    <TouchableOpacity style={styles.button} 
+                     onPress={() => navigation.navigate('InstructionScreen')} >
                     <ImageBackground source={require('../assets/button.png')} style={styles.btnBackground}>
                         <Text style={styles.btnText}>Let's Play!</Text>
                     </ImageBackground>
