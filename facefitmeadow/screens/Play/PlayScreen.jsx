@@ -63,14 +63,18 @@ const PlayScreen = ({ navigation }) => {
                 >
                     <Text style={styles.subHeading2}>Flight Risk</Text>
                     <Text style={styles.text2}>Let’s go an adventure through FaceFit Meadow!</Text>
-                    <TouchableOpacity style={styles.button}
-                    onPress={() => navigation.navigate('InstructionScreen')} >
-                    <ImageBackground source={require('../../assets/button.png')} style={styles.btnBackground}>
-                        <Text style={styles.btnText}>Let's Play!</Text>
-                    </ImageBackground>
-                    </TouchableOpacity>
+
+
+
                 </ImageBackground>
                 </View>
+
+                <TouchableOpacity style={styles.button}
+                    onPress={() => navigation.navigate('InstructionScreen')} >
+                      <ImageBackground source={require('../../assets/button.png')} style={styles.btnBackground}>
+                          <Text style={styles.btnText}>Let's Play!</Text>
+                      </ImageBackground>
+                    </TouchableOpacity>
 
                 <Image
                   source={require('../../assets/game/startScreen.png')}
@@ -115,26 +119,15 @@ const styles = StyleSheet.create({
     width: 153,
     height: 61,
     flex: 1,
-    paddingTop: 20,
     justifyContent: 'center', // Center the content horizontally
     alignItems: 'center', // Center the content vertically
-    marginLeft: 150,
-    marginTop: -75
-  },
-  buttonSecondary: {
-    width: 307,
-    color: "#3E5F2A",
-    height: 69,
-    borderRadius: 20,
-    flex: 1,
-    marginTop:-10,
-    paddingLeft:110,
-    alignItems: 'center',
+    marginLeft: 105,
+    marginTop: -40
   },
   btnBackground:{
-    resizeMode: 'cover', 
     width: 153,
     height: 61,
+    resizeMode: 'contain',
     borderRadius: 20,
     padding:5,
     alignItems: 'center',
@@ -156,60 +149,7 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     // fontFamily: 'Open Sans'
   },
-  logoutButton: {
-    position: 'absolute',
-    marginTop: 70,
-    marginLeft: 340,
-  },
-  logoutIcon: {
-    height: 40,
-    width: 40,
-  },
-  compText:{
-    fontFamily: 'FuzzyBubbles-Regular',
-    fontSize: 32,
-    color: '#3E5F2A',
-    paddingTop: 10,
-    // lineHeight: 50,
-  },
-  paragraph: {
-    fontSize: 28,
-    color: '#3E5F2A',
-    paddingTop: 15,
-    paddingLeft: 40,
-    fontFamily: 'FuzzyBubbles-Regular',
-  },
-  iconContainer:{
-    position:'absolute',
-    marginTop: 20,
-    right:20
 
-  },
-  spot:{
-    width: 360,
-    height: 479
-  },
-  spotIsland:{
-    marginTop:-100
-  },
-  feelingContainer:{
-    alignItems:'center',
-    justifyContent:'center'
-  },
-  feelingText:{
-    fontSize: 16,
-    color: '#3E5F2A',
-    fontWeight: '800',
-    alignItems:'center',
-    marginTop: -30
-  },
-  feeling:{
-    fontSize: 64,
-    fontFamily: 'FuzzyBubbles-Regular',
-    color: '#3E5F2A', 
-    alignItems:'center',
-    marginBottom: 70
-  },
   subHeading:{
     fontSize: 26,
     fontFamily: 'FuzzyBubbles-Bold',
@@ -265,31 +205,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 100
   },
-  scoreContainer: {
-    flexDirection: 'row', // Display score and scoreOutOf side by side
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  score: {
-    fontSize: 50, 
-    color: '#3E5F2A',
-    fontWeight: '600',
-    textAlign: 'right',
-    marginLeft: 150
-  },
-
-  scoreOutOf: {
-    fontSize: 16, // Change the font size for scoreOutOf
-    color: '#3E5F2A',
-    textAlign: 'right',
-  },
   bottomImg:{
     bottom:0,
     width: 418,
-    height:571,
+    height:402,
     marginLeft: -30,
-    marginTop:25
+    marginBottom:-55,
   }
 });
 

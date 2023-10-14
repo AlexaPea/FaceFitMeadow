@@ -31,6 +31,7 @@ const InstructionScreen = ({ navigation }) => {
       {fontLoaded ? (
         <>
           {showFirstContainer ? (
+            <>
             <View style={styles.mediumContainer}>
               <ImageBackground
                 source={require('../../assets/game/Instruction1.png')}
@@ -38,15 +39,18 @@ const InstructionScreen = ({ navigation }) => {
               >
                 <Text style={styles.subHeading1}>Step 1</Text>
                 <Text style={styles.subHeading2}>Face the Camera</Text>
-                <Text style={styles.text2}>Make sure you have your face in front of your phone camera.</Text>
-                <TouchableOpacity style={styles.button} onPress={handleButtonPress}>
-                  <ImageBackground source={require('../../assets/button.png')} style={styles.btnBackground}>
-                    <Text style={styles.btnText}>Ready!</Text>
-                  </ImageBackground>
-                </TouchableOpacity>
+                <Text style={styles.text}>Make sure you have your face in front of your phone camera.</Text>
+
               </ImageBackground>
             </View>
+            <TouchableOpacity style={styles.button} onPress={handleButtonPress}>
+            <ImageBackground source={require('../../assets/button.png')} style={styles.btnBackground}>
+              <Text style={styles.btnText}>Ready!</Text>
+            </ImageBackground>
+          </TouchableOpacity>
+          </>
           ) : (
+            <>
             <View style={styles.mediumContainer}>
               <ImageBackground
                 source={require('../../assets/game/Instruction2.png')}
@@ -55,14 +59,17 @@ const InstructionScreen = ({ navigation }) => {
                 <Text style={styles.subHeading1}>Step 2</Text>
                 <Text style={styles.subHeading2}>Smile Wide</Text>
                 <Text style={styles.text2}>When you smile, you give your pet a boost which allows him to fly a little higher.</Text>
-                <TouchableOpacity style={styles.button}
+
+              </ImageBackground>
+            </View>
+
+            <TouchableOpacity style={styles.button}
                 onPress={() => navigation.navigate('GameWithCamera')}>
                   <ImageBackground source={require('../../assets/button.png')} style={styles.btnBackground}>
                     <Text style={styles.btnText}>Let's Go!</Text>
                   </ImageBackground>
-                </TouchableOpacity>
-              </ImageBackground>
-            </View>
+            </TouchableOpacity>
+            </>
           )}
         </>
       ) : null}
@@ -105,8 +112,8 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     justifyContent: 'center', // Center the content horizontally
     alignItems: 'center', // Center the content vertically
-    marginLeft: 140,
-    marginTop: -75
+    marginLeft: 100,
+    marginTop: -270
   },
   buttonSecondary: {
     width: 307,
@@ -158,7 +165,8 @@ const styles = StyleSheet.create({
     alignItems:'center',
     textAlign: 'center',
     paddingTop: 5,
-    marginLeft: -215
+    marginLeft: -215,
+    fontWeight: 'bold'
   },
   mediumContainer: {
     alignItems: 'center',
@@ -185,16 +193,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#3E5F2A',
     width: 250,
-    marginTop: 10,
-    marginLeft: 95
+    marginTop: 15,
+    marginLeft: 90
   },
   text2: {
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
     color: '#3E5F2A',
-    width: 250,
-    marginTop: 20,
+    width: 240,
+    marginTop: 5,
     marginLeft: 90
   },
 });

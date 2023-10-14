@@ -157,27 +157,31 @@ export default function GameWithCamera({navigation}) {
 
             {/* Render a "Restart" button when the game is over */}
             {!isPlaying && (
+              <>
               <View style={styles.restartContainer}>
                 <ImageBackground
                   source={require('../../assets/Container/restart.png')}
                   style={styles.restartContainerBackground}
                 >
                   <Text style={styles.heading1}>Restart</Text>
-                  <View style={styles.button}>
+
+                </ImageBackground>
+              </View>
+
+              <View style={styles.button}>
                     <TouchableOpacity onPress={restartGame} >
                       <ImageBackground source={require('../../assets/button.png')} style={styles.btnBackground}>
-                        <Text style={styles.btnText}>Let's Play!</Text>
+                        <Text style={styles.btnText}>Play Again</Text>
                       </ImageBackground>
                     </TouchableOpacity>
                   </View>
 
                   <View style={styles.buttonSecondary}>
-                    <TouchableOpacity  onPress={() => navigation.navigate('HomeScreen')}>
+                    <TouchableOpacity  onPress={() => navigation.navigate('HomeTab')}>
                       <Text style={styles.btnTextSecondary}>Home</Text>
                     </TouchableOpacity>
                   </View>
-                </ImageBackground>
-              </View>
+              </>
           )}
 
           <Bird birdBottom={birdBottom} birdLeft={birdLeft} />
@@ -233,8 +237,9 @@ const styles = StyleSheet.create({
   ground: {
     width: 430,
     height: 562,
-    marginTop: 150,
+    marginTop: 400,
     zIndex: 1,
+    position: 'absolute'
   },
   restartContainer:{
     width: 399,
@@ -249,18 +254,22 @@ const styles = StyleSheet.create({
     height: 216,
   },
   button: {
+    flex: 1,
     width: 132,
     height: 53,
-    marginTop: 10,
-    marginLeft: 110, // Adjust this value for spacing
+    marginTop: 235,
+    marginLeft: 90, // Adjust this value for spacing
+    zIndex: 100
   },
   buttonSecondary: {
+    flex: 1,
     width: 50,
     color: "#3E5F2A",
     height: 69,
     borderRadius: 20,
-    marginTop:-50,
-    marginLeft:130,
+    marginTop:-430,
+    marginLeft:115,
+    zIndex: 100
   },
   btnBackground:{
     resizeMode: 'contain',
@@ -272,28 +281,28 @@ const styles = StyleSheet.create({
   },
   btnText:{
     fontFamily: 'FuzzyBubbles-Regular', 
-    fontSize: 22,
+    fontSize: 18,
     color: 'white',
     width: 350,
     textAlign: 'center',
     alignItems: 'center',
-    paddingTop:8,
+    paddingTop:5,
   },
   btnTextSecondary:{
       fontFamily: 'FuzzyBubbles-Regular', 
-      fontSize: 24,
+      fontSize: 20,
       color: '#3E5F2A',
       width: 350,
       textAlign: 'center',
       alignItems: 'center',
-      paddingTop:8,
+      paddingTop:5,
     },
     heading1: {
       fontFamily: 'FuzzyBubbles-Regular',
-      fontSize: 48,
+      fontSize: 38,
       color: '#3E5F2A',
       width: 350,
-      paddingTop: 50,
+      paddingTop: 45,
       paddingLeft: 160,
       lineHeight: 50,
       alignItems:'center',
