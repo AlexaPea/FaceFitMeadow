@@ -3,10 +3,12 @@ import { StyleSheet, Text, View, ImageBackground, TouchableOpacity, Image, Scrol
 import * as Font from 'expo-font';
 import { signOutUser } from '../services/firebaseAuth';
 import { getCurrentUser } from '../services/firebaseAuth';
-import { getUserRoleFromDatabase } from '../services/firebaseDb';
+import { fetchTodaysScores } from '../services/firebaseDb';
 
 
 const HomeScreen = ({ navigation }) => {
+  const [todaysScores, setTodaysScores] = useState([]); // State to store today's scores
+  const [totalScore, setTotalScore] = useState([]); // State to store today's scores
   const [fontLoaded, setFontLoaded] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const user = getCurrentUser();
@@ -42,6 +44,23 @@ const HomeScreen = ({ navigation }) => {
     loadFonts();
   }, []);
 
+  // Use the useEffect hook to fetch today's scores when the component mounts
+  useEffect(() => {
+    fetchTodaysScores()
+      .then((scores) => {
+        // Set the retrieved scores to the state
+        setTodaysScores(scores);
+        console.log(scores)
+        // Calculate the total score
+        const totalScore = scores.reduce((total, score) => total + score.score, 0);
+
+        // Update the component's state with the total score
+        setTotalScore(totalScore);
+      })
+      .catch((error) => {
+        console.error("Error fetching today's scores: " + error);
+      });
+  }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -61,9 +80,9 @@ const HomeScreen = ({ navigation }) => {
             </TouchableOpacity>
 
 
-            <TouchableOpacity style={styles.spotIsland}>
+            <View style={styles.spotIsland}>
               <Image source={require('../assets/SpotIsland/4.png')} style={styles.spot} />
-            </TouchableOpacity>
+            </View>
 
             <View style={styles.feelingContainer}>
                 <Text style={styles.feelingText}>Spot is feeling:</Text>
@@ -79,7 +98,7 @@ const HomeScreen = ({ navigation }) => {
                     <Text style={styles.subHeading}>Todays Mission:</Text>
                     <Text style={styles.text}>Help Spot leap over 10 obstacles to bring a big smile to his face!</Text>
                     <View style={styles.scoreContainer}>
-                    <Text style={styles.score}>0</Text>
+                    <Text style={styles.score}>{totalScore}</Text>
                     <Text style={styles.scoreOutOf}>/10</Text>
                     </View>
                 </ImageBackground>

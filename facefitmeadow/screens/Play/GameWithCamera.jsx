@@ -137,13 +137,9 @@ export default function GameWithCamera({navigation}) {
         var creatorInfo = getCurrentUser();
         console.log(creatorInfo);
     
-        // Get the current date and time
-        const currentDate = new Date().toJSON();
-    
         var ScoreData = {
           score: score,
           userId: creatorInfo.uid,
-          date: currentDate, // Add the date field
         };
     
         console.log(ScoreData);
@@ -156,7 +152,7 @@ export default function GameWithCamera({navigation}) {
           console.log("Did not add score");
         }
       } else {
-        Alert.alert("Oops! Please add all the score info");
+        console.log("Oops! Please add all the score info");
       }
     };
     
