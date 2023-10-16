@@ -52,7 +52,7 @@ function roundToMidnight(date) {
   return roundedDate;
 }
 
-export const fetchTodaysScores = async () => {
+export const fetchTodaysScores = async (userId) => {
   try {
     // Get the start and end dates for today
     const currentDate = new Date();
@@ -60,11 +60,12 @@ export const fetchTodaysScores = async () => {
     const endOfToday = new Date(currentDate);
     endOfToday.setHours(23, 59, 59, 999);
 
-    // Create a query to filter scores for the current day
+    // Create a query to filter scores for the current day and the specific user
     const scoresQuery = query(
       collection(db, "scores"),
       where("date", ">=", startOfToday.toISOString()),
-      where("date", "<=", endOfToday.toISOString())
+      where("date", "<=", endOfToday.toISOString()),
+      where("userId", "==", userId) // Filter scores by user
     );
 
     // Execute the query

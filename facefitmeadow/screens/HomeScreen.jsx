@@ -4,6 +4,7 @@ import * as Font from 'expo-font';
 import { signOutUser } from '../services/firebaseAuth';
 import { getCurrentUser } from '../services/firebaseAuth';
 import { fetchTodaysScores } from '../services/firebaseDb';
+import { useFocusEffect } from '@react-navigation/native'; // Import useFocusEffect
 
 
 const HomeScreen = ({ navigation }) => {
@@ -14,6 +15,8 @@ const HomeScreen = ({ navigation }) => {
   const user = getCurrentUser();
   const [countdown, setCountdown] = useState('');
   const [showParagraph, setShowParagraph] = useState(false);
+  const [imagePath, setImagePath] = useState(null);
+  const [feelingText, setFeelingText] = useState('');
 
   const loadFonts = async () => {
     await Font.loadAsync({
@@ -44,23 +47,44 @@ const HomeScreen = ({ navigation }) => {
     loadFonts();
   }, []);
 
-  // Use the useEffect hook to fetch today's scores when the component mounts
-  useEffect(() => {
-    fetchTodaysScores()
-      .then((scores) => {
-        // Set the retrieved scores to the state
-        setTodaysScores(scores);
-        console.log(scores)
-        // Calculate the total score
-        const totalScore = scores.reduce((total, score) => total + score.score, 0);
 
-        // Update the component's state with the total score
-        setTotalScore(totalScore);
-      })
-      .catch((error) => {
-        console.error("Error fetching today's scores: " + error);
-      });
-  }, []);
+  // Use useFocusEffect to fetch today's scores when the component is focused
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchTodaysScores(user.uid) // Pass the user's ID to fetch their scores
+        .then((scores) => {
+          // Set the retrieved scores to the state
+          setTodaysScores(scores);
+          console.log(scores);
+          // Calculate the total score
+          const totalScore = scores.reduce((total, score) => total + score.score, 0);
+
+          let imagePath = '';
+          if (totalScore === 0) {
+            imagePath = require('../assets/SpotIsland/0.png');
+            setFeelingText('SAD');
+          } else if (totalScore >= 1 && totalScore <= 3) {
+            imagePath = require('../assets/SpotIsland/1.png');
+            setFeelingText('ANNOYED');
+          } else if (totalScore >= 4 && totalScore <= 6) {
+            imagePath = require('../assets/SpotIsland/2.png');
+            setFeelingText('OKAY');
+          } else if (totalScore >= 7 && totalScore <= 9) {
+            imagePath = require('../assets/SpotIsland/3.png');
+            setFeelingText('HAPPY');
+          } else {
+            imagePath = require('../assets/SpotIsland/4.png');
+            setFeelingText('LOVED');
+          }
+
+          setImagePath(imagePath);
+          setTotalScore(totalScore);
+        })
+        .catch((error) => {
+          console.error("Error fetching today's scores: " + error);
+        });
+    }, [])
+  );
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -81,12 +105,12 @@ const HomeScreen = ({ navigation }) => {
 
 
             <View style={styles.spotIsland}>
-              <Image source={require('../assets/SpotIsland/4.png')} style={styles.spot} />
+              <Image source={imagePath} style={styles.spot} />
             </View>
 
             <View style={styles.feelingContainer}>
                 <Text style={styles.feelingText}>Spot is feeling:</Text>
-                <Text style={styles.feeling}>HAPPY</Text>
+                <Text style={styles.feeling}>{feelingText}</Text>
             </View>
 
 
