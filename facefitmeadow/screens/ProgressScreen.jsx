@@ -4,6 +4,9 @@ import * as Font from 'expo-font';
 import { signOutUser } from '../services/firebaseAuth';
 import { getCurrentUser } from '../services/firebaseAuth';
 import { getUserRoleFromDatabase } from '../services/firebaseDb';
+import { LineChart} from "react-native-chart-kit";
+import { getUserScores,getCurrentDayStreak,getUserHighscore  } from '../services/firebaseDb'; 
+
 
 const ProgressScreen = ({ navigation }) => {
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -11,6 +14,9 @@ const ProgressScreen = ({ navigation }) => {
   const user = getCurrentUser();
   const [countdown, setCountdown] = useState('');
   const [showParagraph, setShowParagraph] = useState(false);
+  const [userScores, setUserScores] = useState([]); // State to store user scores
+  const [highScore, setHighScore] = useState(0); // State to store user's high score
+  const [dayStreak, setDayStreak] = useState(0); // State to store user's day streak
 
   const loadFonts = async () => {
     await Font.loadAsync({
@@ -36,6 +42,41 @@ const ProgressScreen = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
+    // Fetch user scores when the component mounts
+    const fetchUserScores = async () => {
+      const userId = getCurrentUser().uid; // Get the user's UID
+      const scores = await getUserScores(userId); // Fetch user scores
+      console.log(scores);
+      setUserScores(scores); // Update the state with user scores
+    };
+
+    fetchUserScores();
+  }, []);
+
+  useEffect(() => {
+    // Fetch user's high score when the component mounts
+    const fetchHighScore = async () => {
+      const userId = getCurrentUser().uid; // Get the user's UID
+      const highscore = await getUserHighscore(userId); // Fetch user's high score
+      console.log(highScore);
+      setHighScore(highscore); // Update the state with user's high score
+    };
+
+    fetchHighScore();
+  }, []);
+
+  useEffect(() => {
+    // Fetch user's day streak when the component mounts
+    const fetchDayStreak = async () => {
+      const userId = getCurrentUser().uid; // Get the user's UID
+      const streak = await getCurrentDayStreak(userId); // Fetch user's day streak
+      setDayStreak(streak); // Update the state with user's day streak
+    };
+
+    fetchDayStreak();
+  }, []);
+
+  useEffect(() => {
     loadFonts();
   }, []);
 
@@ -57,12 +98,12 @@ const ProgressScreen = ({ navigation }) => {
               >
                 <View style={styles.trophyContainer}>
                   <Image source={require('../assets/Icon/Trophy.png')} style={styles.trophyImage} />
-                  <Text style={styles.subHeading}>15</Text>
+                  <Text style={styles.subHeading}>{highScore}</Text>
                   <Text style={styles.text}>High Score</Text>
                 </View>
               </ImageBackground>
             </View>
-
+  
             <View style={styles.tinyContainer2}>
               <ImageBackground
                 source={require('../assets/Container/Tiny2.png')}
@@ -70,16 +111,59 @@ const ProgressScreen = ({ navigation }) => {
               >
                 <View style={styles.streakContainer}>
                   <Image source={require('../assets/Icon/Streak.png')} style={styles.streakImage} />
-                  <Text style={styles.subHeading2}>20</Text>
+                  <Text style={styles.subHeading2}>{dayStreak}</Text>
                   <Text style={styles.text2}>Day Streak</Text>
                 </View>
               </ImageBackground>
             </View>
           </View>
           <View>
-              <Text style={styles.mission}>Mission Timeline</Text>
-              <Text style={styles.missionText}>This graph depicts how your mission is going based on your daily scores!</Text>
-            </View>
+            <Text style={styles.mission}>Mission Timeline</Text>
+            <Text style={styles.missionText}>This graph depicts how your mission is going based on your daily scores!</Text>
+            {userScores.length > 0 ? ( // Check if userScores is available
+              <View style={styles.graph}>
+                <LineChart
+                  style={styles.graph}
+                  data={{
+                    // labels: ["January", "February", "March", "April", "May", "June"],
+                    datasets: [
+                      {
+                        data: userScores,
+                      },
+                    ],
+                  }}
+                  width={330}
+                  height={210}
+                  yAxisLabel=""
+                  yAxisSuffix=""
+                  yAxisInterval={1}
+                  chartConfig={{
+                    backgroundColor: "#FEE08C",
+                    backgroundGradientFrom: "#FEE08C",
+                    backgroundGradientTo: "#FEE08C",
+                    decimalPlaces: 2,
+                    color: (opacity = 5) => `rgba(91, 140, 62, ${opacity})`,
+                    labelColor: (opacity = 1) => `rgba(62, 95, 42, ${opacity})`,
+                    style: {
+                      borderRadius: 0,
+                    },
+                    propsForDots: {
+                      r: "0",
+                      strokeWidth: "2",
+                      stroke: "#5B8C3E",
+                    },
+                  }}
+                  bezier
+                  style={{
+                    marginVertical: 8,
+                    borderRadius: 16,
+                  }}
+                />
+              </View>
+            ) : (
+              <Text>Loading...</Text> // Render a loading indicator or a message
+            )}
+          </View>
         </>
       ) : null}
     </ImageBackground>
@@ -285,7 +369,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     color: '#3E5F2A',
     width: 350,
-    paddingTop: 70,
+    paddingTop: 50,
     paddingLeft: 20,
     lineHeight: 50,
     textShadowColor: '#3E5F2A',
@@ -299,6 +383,10 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     // fontFamily: 'Open Sans'
   },
+  graph:{
+    marginTop: -20,
+    marginLeft: 20
+  }
 });
 
 export default ProgressScreen;

@@ -4,9 +4,12 @@ import { Camera } from "expo-camera";
 import * as FaceDetector from "expo-face-detector";
 import { addScoreToCollection } from '../../services/firebaseDb';
 import { getCurrentUser } from '../../services/firebaseAuth';
-
+import { Audio } from 'expo-av';
 import Bird from '../../components/Bird'
 import Obstacles from '../../components/Obstacles'
+import { Icon, Button } from 'react-native-elements';
+import { useFocusEffect } from '@react-navigation/native';
+
 
 export default function GameWithCamera({navigation}) {
   const [isPlaying, setIsPlaying] = useState(true);
@@ -20,13 +23,64 @@ export default function GameWithCamera({navigation}) {
   const [obstaclesNegHeightTwo, setObstaclesNegHeightTwo] = useState(0);
   const [isGameOver, setIsGameOver] = useState(false);
   const [score, setScore] = useState(0);
-  const gravity = 3;
+  const gravity = 5;
   let obstacleWidth = 152;
   let obstacleHeight = 352;
   let gap = 200;
   let gameTimerId;
   let obstaclesTimerId;
   let obstaclesTimerIdTwo;
+  const [isSmiling, setIsSmiling] = useState(false);
+  const jumpCooldownDuration = 1000; // 1 second
+  let lastJumpTimestamp = 0;
+  const [sound, setSound] = useState(null);
+  const [isSoundPlaying, setIsSoundPlaying] = useState(false);
+
+  const playAudio = async () => {
+    const { sound } = await Audio.Sound.createAsync(
+      require('../../assets/Music/GameMusic.mp3')
+    );
+    setSound(sound);
+    await sound.setIsLoopingAsync(true);
+    await sound.playAsync();
+    setIsSoundPlaying(true);
+  };
+
+  const stopAudio = async () => {
+    if (sound) {
+      await sound.unloadAsync();
+    }
+  };
+
+  useEffect(() => {
+    playAudio();
+
+    // Clean up the audio when the component unmounts
+    return () => {
+      stopAudio();
+    };
+  }, []); // Only call playAudio when the component mounts
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Screen is focused, you can handle other actions here
+      return () => {
+        // Screen is blurred, you can handle other actions here
+      };
+    }, [])
+  );
+
+
+  
+  const toggleAudio = async () => {
+    if (isSoundPlaying) {
+      await sound.pauseAsync();
+    } else {
+      await sound.playAsync();
+    }
+    setIsSoundPlaying(!isSoundPlaying);
+  };
+  
 
     //function to restart the game
     const restartGame = () => {
@@ -42,9 +96,12 @@ export default function GameWithCamera({navigation}) {
   
       // Start the game again
       setIsPlaying(true);
+      playAudio();
     };
 
     const GoBack = () => {
+      stopAudio();
+      setIsPlaying(false);
       createScoreData();
       navigation.navigate('HomeTab');
     }
@@ -54,7 +111,7 @@ export default function GameWithCamera({navigation}) {
     if (birdBottom > 0) {
       gameTimerId = setInterval(() => {
         setBirdBottom(birdBottom => birdBottom - gravity);
-      }, 30);
+      }, 10);
 
       return () => {
         clearInterval(gameTimerId);
@@ -74,7 +131,7 @@ export default function GameWithCamera({navigation}) {
   useEffect(() => {
     if (obstaclesLeft > -60) {
       obstaclesTimerId = setInterval(() => {
-        setObstaclesLeft(obstaclesLeft => obstaclesLeft - 5)
+        setObstaclesLeft(obstaclesLeft => obstaclesLeft - 10)
       }, 30)
       return () => {
         clearInterval(obstaclesTimerId)
@@ -90,7 +147,7 @@ export default function GameWithCamera({navigation}) {
   useEffect(() => {
     if (obstaclesLeftTwo > -60) {
       obstaclesTimerIdTwo = setInterval(() => {
-        setObstaclesLeftTwo(obstaclesLeftTwo => obstaclesLeftTwo - 5)
+        setObstaclesLeftTwo(obstaclesLeftTwo => obstaclesLeftTwo - 10)
       }, 30)
         return () => {
           clearInterval(obstaclesTimerIdTwo)
@@ -126,6 +183,7 @@ export default function GameWithCamera({navigation}) {
     })
 
     const gameOver = () => {
+      stopAudio();
       clearInterval(gameTimerId)
       clearInterval(obstaclesTimerId)
       clearInterval(obstaclesTimerIdTwo)
@@ -161,8 +219,22 @@ export default function GameWithCamera({navigation}) {
     const handleFacesDetected = ({ faces }) => {
       if (faces.length > 0 && !isGameOver) {
         const smilingScore = faces[0].smilingProbability;
+    
         if (smilingScore > 0.7) {
-          jump();
+          if (!isSmiling) {
+            // Start a jump if not already smiling
+            setIsSmiling(true);
+    
+            // Check if a jump is allowed based on the cooldown
+            const currentTimestamp = Date.now();
+            if (currentTimestamp - lastJumpTimestamp >= jumpCooldownDuration) {
+              jump();
+              lastJumpTimestamp = currentTimestamp;
+            }
+          }
+        } else {
+          // Reset the smile state
+          setIsSmiling(false);
         }
       }
     };
@@ -177,7 +249,7 @@ export default function GameWithCamera({navigation}) {
           mode: FaceDetector.FaceDetectorMode.accurate,
           detectLandmarks: FaceDetector.FaceDetectorLandmarks.all,
           runClassifications: FaceDetector.FaceDetectorClassifications.all,
-          minDetectionInterval: 500,
+          minDetectionInterval: 100,
           tracking: true,
         }}
       >
@@ -185,12 +257,27 @@ export default function GameWithCamera({navigation}) {
           source={require('../../assets/backgrounds/GameBack.png')}
           style={{ ...styles.backgroundImage, zIndex: 0 }}  // Lower zIndex for the background image
         >
+          <Button
+          icon={
+            <Icon
+              name={isSoundPlaying ? 'volume-up' : 'volume-off'}
+              type="font-awesome"
+              size={30}
+              color="white"
+            />
+          }
+          onPress={toggleAudio}
+          buttonStyle={styles.soundButton}
+          containerStyle={styles.soundButtonContainer}
+        />
+
           <Text style={styles.scoreText}>Current Score:</Text>
           <Text style={styles.score}>{score}</Text>
 
             {/* Render a "Restart" button when the game is over */}
             {!isPlaying && (
               <>
+             
               <View style={styles.restartContainer}>
                 <ImageBackground
                   source={require('../../assets/Container/restart.png')}
@@ -200,21 +287,21 @@ export default function GameWithCamera({navigation}) {
 
                 </ImageBackground>
               </View>
+            
+              <View style={styles.buttonsContainer}>
+            <TouchableOpacity onPress={restartGame} style={styles.button}>
+              <ImageBackground source={require('../../assets/button.png')} style={styles.btnBackground}>
+                <Text style={styles.btnText}>Play Again</Text>
+              </ImageBackground>
+            </TouchableOpacity>
 
-              <View style={styles.button}>
-                <TouchableOpacity onPress={restartGame} >
-                  <ImageBackground source={require('../../assets/button.png')} style={styles.btnBackground}>
-                    <Text style={styles.btnText}>Play Again</Text>
-                  </ImageBackground>
-                </TouchableOpacity>
-              </View>
-
-              <View style={styles.buttonSecondary}>
-                <TouchableOpacity  onPress={GoBack}>
-                  <Text style={styles.btnTextSecondary}>Home</Text>
-                </TouchableOpacity>
-              </View>
+            <TouchableOpacity onPress={GoBack} style={styles.buttonSecondary}>
+              <Text style={styles.btnTextSecondary}>Home</Text>
+            </TouchableOpacity>
+          </View>
+             
               </>
+
           )}
 
           <Bird birdBottom={birdBottom} birdLeft={birdLeft} />
@@ -286,23 +373,32 @@ const styles = StyleSheet.create({
     width: 399,
     height: 216,
   },
+  buttonsContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 100,
+  },
+  
+  
   button: {
-    flex: 1,
     width: 132,
     height: 53,
-    marginTop: 235,
-    marginLeft: 90, // Adjust this value for spacing
-    zIndex: 100
+    top: 60, // Adjust this value for vertical positioning
+    left: -50, // Adjust this value for horizontal positioning
+    zIndex: 110,
   },
   buttonSecondary: {
-    flex: 1,
     width: 50,
-    color: "#3E5F2A",
     height: 69,
     borderRadius: 20,
-    marginTop:-430,
-    marginLeft:115,
-    zIndex: 100
+    top: 10, // Adjust this value for vertical positioning
+    left: 70, // Adjust this value for horizontal positioning
+    zIndex: 110,
   },
   btnBackground:{
     resizeMode: 'contain',
@@ -316,7 +412,7 @@ const styles = StyleSheet.create({
     fontFamily: 'FuzzyBubbles-Regular', 
     fontSize: 18,
     color: 'white',
-    width: 350,
+    width: 150,
     textAlign: 'center',
     alignItems: 'center',
     paddingTop:5,
@@ -325,7 +421,7 @@ const styles = StyleSheet.create({
       fontFamily: 'FuzzyBubbles-Regular', 
       fontSize: 20,
       color: '#3E5F2A',
-      width: 350,
+      width: 80,
       textAlign: 'center',
       alignItems: 'center',
       paddingTop:5,
@@ -340,5 +436,17 @@ const styles = StyleSheet.create({
       lineHeight: 50,
       alignItems:'center',
       justifyContent: 'center'
+    },
+    soundButton: {
+      backgroundColor: 'transparent', // Set button background to transparent
+    },
+    soundButtonContainer: {
+      position: 'absolute',
+      top: 20, // Adjust this for vertical positioning
+      right: 20, // Adjust this for horizontal positioning
+      borderRadius: 50, // Make it circular
+      width: 50, // Set width equal to height for a perfect circle
+      height: 50, // Set height equal to width for a perfect circle
+      zIndex: 100, // Adjust this if needed
     },
 });
