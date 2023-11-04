@@ -210,31 +210,46 @@ export const getCurrentDayStreak = async (userId) => {
     // Get the user's scores for today
     const todaysScores = await fetchTodaysScores(userId);
 
+    console.log("Todays Scores:", todaysScores);
+
     if (todaysScores.length === 0) {
       // If there are no scores for today, the streak is broken
+      console.log("No scores for today. Streak is broken.");
       return 0;
     }
 
-    // Get the user's last played date
-    const lastPlayedDate = new Date(todaysScores[todaysScores.length - 1].date);
-    const currentDate = new Date();
+    // Sort the scores by date in ascending order
+    todaysScores.sort((a, b) => a.date - b.date);
 
-    // Calculate the time difference between the last played date and today
-    const timeDiff = currentDate - lastPlayedDate;
-    const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    // Initialize the streak count and the expected date for the next score
+    let streakCount = 0;
+    let expectedDate = new Date(todaysScores[0].date);
 
-    if (daysDiff > 1) {
-      // If there's a gap of more than one day between playing days, the streak is broken
-      return 0;
-    } else {
-      // The streak continues if the gap is one day or less
-      return daysDiff;
+    // Iterate through the scores for today
+    for (const score of todaysScores) {
+      const scoreDate = new Date(score.date);
+
+      if (scoreDate.getTime() === expectedDate.getTime()) {
+        // If the date matches the expected date, increment the streak count
+        streakCount++;
+      } else {
+        // If there's a gap, consider the streak broken
+        break;
+      }
+
+      // Update the expected date for the next score
+      expectedDate.setDate(expectedDate.getDate() + 1);
     }
+
+    return streakCount;
   } catch (error) {
     console.error("Error calculating current day streak: " + error);
     return 0;
   }
 };
+
+
+
 
 
 
