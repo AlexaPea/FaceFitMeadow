@@ -15,6 +15,7 @@ const HomeScreen = ({ navigation }) => {
   const [imagePath, setImagePath] = useState(null);
   const [feelingText, setFeelingText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [showLovedGif, setShowLovedGif] = useState(false);
 
   const loadFonts = async () => {
     await Font.loadAsync({
@@ -80,7 +81,7 @@ const HomeScreen = ({ navigation }) => {
           // Use setTimeout to hide the loader after 3 seconds
           setTimeout(() => {
             setIsLoading(false);
-          }, 2000); 
+          }, 1000); 
         })
         .catch((error) => {
           console.error("Error fetching today's scores: " + error);
@@ -88,6 +89,14 @@ const HomeScreen = ({ navigation }) => {
         });
     }, [])
   );
+
+  const handleSpotIslandClick = () => {
+    // Show the loved gif for 3 seconds
+    setShowLovedGif(true);
+    setTimeout(() => {
+      setShowLovedGif(false);
+    }, 2000);
+  };
 
   return (
     <>
@@ -117,9 +126,28 @@ const HomeScreen = ({ navigation }) => {
             </TouchableOpacity>
 
 
-            <View style={styles.spotIsland}>
+            <TouchableOpacity onPress={handleSpotIslandClick} activeOpacity={1}>
               <Image source={imagePath} style={styles.spot} />
-            </View>
+              {showLovedGif && (
+                <View style={styles.lovedContainer}>
+                  <Image
+                    source={
+                      feelingText === 'SAD'
+                        ? require('../assets/Feelings/sad.gif')
+                        : feelingText === 'ANNOYED'
+                        ? require('../assets/Feelings/annoyed.gif')
+                        : feelingText === 'HAPPY'
+                        ? require('../assets/Feelings/happy.gif')
+                        : feelingText === 'LOVED'
+                        ? require('../assets/Feelings/loved.gif')
+                        : require('../assets/Feelings/okay.gif') // Default GIF when mood is not recognized
+                    }
+                  style={styles.lovedGif}
+                />
+              </View>
+            )}
+</TouchableOpacity>
+
 
             <View style={styles.feelingContainer}>
                 <Text style={styles.feelingText}>Spot is feeling:</Text>
@@ -292,7 +320,8 @@ const styles = StyleSheet.create({
   },
   spot:{
     width: 360,
-    height: 479
+    height: 479,
+    marginTop: -100
   },
   spotIsland:{
     marginTop:-100
@@ -410,6 +439,28 @@ const styles = StyleSheet.create({
     color: '#3E5F2A',
     textAlign: 'right',
   },
+  lovedGif: {
+    position: 'absolute',
+    width: 400, // Set the desired width
+    height: 300, // Set the desired height
+    zIndex: 99,
+    top: -140, // Adjust the top position to align the gif correctly
+    alignSelf: 'center',
+    left: -20
+  },
+  
+  lovedContainer: {
+    position: 'absolute',
+    zIndex: 999, // Ensure the loader is on top of other UI components
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '120%', // Take the full width of the screen
+    height: '100%', // Take the full height of the screen
+  }
 });
 
 export default HomeScreen;
