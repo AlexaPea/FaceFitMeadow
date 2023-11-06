@@ -11,12 +11,10 @@ const HomeScreen = ({ navigation }) => {
   const [todaysScores, setTodaysScores] = useState([]); // State to store today's scores
   const [totalScore, setTotalScore] = useState([]); // State to store today's scores
   const [fontLoaded, setFontLoaded] = useState(false);
-  const [userRole, setUserRole] = useState(null);
   const user = getCurrentUser();
-  const [countdown, setCountdown] = useState('');
-  const [showParagraph, setShowParagraph] = useState(false);
   const [imagePath, setImagePath] = useState(null);
   const [feelingText, setFeelingText] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const loadFonts = async () => {
     await Font.loadAsync({
@@ -79,19 +77,34 @@ const HomeScreen = ({ navigation }) => {
 
           setImagePath(imagePath);
           setTotalScore(totalScore);
+          // Use setTimeout to hide the loader after 3 seconds
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 2000); 
         })
         .catch((error) => {
           console.error("Error fetching today's scores: " + error);
+          setIsLoading(false);
         });
     }, [])
   );
 
   return (
+    <>
+      {isLoading && ( // Show loader while isLoading is true
+        <View style={styles.loaderContainer}>
+          <Image source={require('../assets/Loader1.gif')} style={styles.loader} />
+        </View>
+      )}
     <ScrollView contentContainerStyle={styles.scrollContainer}>
+
       <ImageBackground
         source={require('../assets/backgrounds/Home.png')}
         style={styles.backgroundImage}
       >
+
+        
+
         {fontLoaded ? (
           <>
             <Text style={styles.heading2}>Hello,</Text>
@@ -149,6 +162,7 @@ const HomeScreen = ({ navigation }) => {
         ) : null}
       </ImageBackground>
     </ScrollView>
+    </>
   );
 };
 
@@ -156,6 +170,24 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
     height: 1400
+  },
+  loaderContainer: {
+    position: 'absolute',
+    zIndex: 999, // Ensure the loader is on top of other UI components
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Semi-transparent white background
+    width: '100%', // Take the full width of the screen
+    height: '100%', // Take the full height of the screen
+  },
+  loader:{
+    position: 'absolute',
+    width: '100%', // Set the width to take the full screen width
+    height: '100%', // Set the height to take the full screen height
   },
   backgroundImage: {
     flex: 1,

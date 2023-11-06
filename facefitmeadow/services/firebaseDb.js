@@ -203,50 +203,209 @@ export const getUserHighscore = async (userId) => {
 
 
 
-
 // Define a function to calculate the current day streak
 export const getCurrentDayStreak = async (userId) => {
   try {
-    // Get the user's scores for today
-    const todaysScores = await fetchTodaysScores(userId);
+    // Fetch all scores for the user
+    const allScoresQuery = query(
+      collection(db, "scores"),
+      where("userId", "==", userId),
+      orderBy("date", "asc") // Order the scores in ascending order
+    );
 
-    console.log("Todays Scores:", todaysScores);
+    const allScoresSnapshot = await getDocs(allScoresQuery);
 
-    if (todaysScores.length === 0) {
-      // If there are no scores for today, the streak is broken
-      console.log("No scores for today. Streak is broken.");
-      return 0;
-    }
+    // Create a map to store scores by date
+    const scoresByDate = new Map();
 
-    // Sort the scores by date in ascending order
-    todaysScores.sort((a, b) => a.date - b.date);
+    allScoresSnapshot.forEach((doc) => {
+      const scoreData = doc.data();
+      const scoreDate = new Date(scoreData.date);
 
-    // Initialize the streak count and the expected date for the next score
-    let streakCount = 0;
-    let expectedDate = new Date(todaysScores[0].date);
-
-    // Iterate through the scores for today
-    for (const score of todaysScores) {
-      const scoreDate = new Date(score.date);
-
-      if (scoreDate.getTime() === expectedDate.getTime()) {
-        // If the date matches the expected date, increment the streak count
-        streakCount++;
+      // If a score already exists for this date, add the new score to the existing score
+      if (scoresByDate.has(scoreDate.toDateString())) {
+        scoresByDate.set(
+          scoreDate.toDateString(),
+          scoresByDate.get(scoreDate.toDateString()) + scoreData.score
+        );
       } else {
-        // If there's a gap, consider the streak broken
-        break;
+        scoresByDate.set(scoreDate.toDateString(), scoreData.score);
       }
+    });
 
-      // Update the expected date for the next score
-      expectedDate.setDate(expectedDate.getDate() + 1);
+    // Calculate the number of days since the user started playing
+    const currentDate = new Date();
+    const earliestDate = allScoresSnapshot.empty
+      ? currentDate // If there are no scores, use the current date as the start date
+      : new Date(allScoresSnapshot.docs[0].data().date);
+
+    const daysSinceStart = Math.ceil((currentDate - earliestDate) / (1000 * 60 * 60 * 24));
+
+    // Create an array to store the user's scores for each day, initializing all to 0
+    let userScores = Array(daysSinceStart).fill(0);
+
+    // Fill in the user's scores based on the map
+    let currentDateCopy = new Date(earliestDate); // Create a copy to avoid modifying the original date
+    for (let i = 0; i < daysSinceStart; i++) {
+      const score = scoresByDate.get(currentDateCopy.toDateString());
+      if (score !== undefined) {
+        userScores[i] = score;
+      }
+      currentDateCopy.setDate(currentDateCopy.getDate() + 1);
     }
 
-    return streakCount;
+    // Calculate the current day streak
+    let currentStreak = 0;
+    for (let i = userScores.length - 1; i >= 0; i--) {
+      if (userScores[i] === 0) {
+        break; // Streak is broken when a day with 0 score is encountered
+      }
+      currentStreak++;
+    }
+
+    console.log("Current day streak calculated: " + currentStreak);
+
+    return currentStreak;
   } catch (error) {
-    console.error("Error calculating current day streak: " + error);
+    console.error("Error fetching user scores: " + error);
+    return 0; // If an error occurs, return 0 as the streak
+  }
+};
+
+
+
+export const getHighestScore = async (userId) => {
+  try {
+    const allScoresQuery = query(
+      collection(db, "scores"),
+      where("userId", "==", userId),
+      orderBy("score", "desc"), // Order scores by score in descending order
+      limit(1) // Limit the result to 1 record to get the highest score
+    );
+
+    const querySnapshot = await getDocs(allScoresQuery);
+
+    if (!querySnapshot.empty) {
+      const highestScore = querySnapshot.docs[0].data().score;
+      return highestScore;
+    } else {
+      console.log("No scores found for the user");
+    }
+
+    return 0; // Return 0 if there are no scores
+  } catch (error) {
+    console.error("Error fetching user highest score: " + error);
     return 0;
   }
 };
+
+export const getUserTotalScore = async (userId) => {
+  try {
+    const allScoresQuery = query(
+      collection(db, "scores"),
+      where("userId", "==", userId)
+    );
+
+    const querySnapshot = await getDocs(allScoresQuery);
+
+    let totalScore = 0;
+
+    querySnapshot.forEach((doc) => {
+      totalScore += doc.data().score;
+    });
+
+    return totalScore;
+  } catch (error) {
+    console.error("Error calculating user total score: " + error);
+    return 0;
+  }
+};
+
+
+export const getHighestDayStreak = async (userId) => {
+  try {
+    // Fetch all scores for the user ordered by date in ascending order
+    const allScoresQuery = query(
+      collection(db, "scores"),
+      where("userId", "==", userId),
+      orderBy("date", "asc")
+    );
+
+    const querySnapshot = await getDocs(allScoresQuery);
+
+    if (querySnapshot.empty) {
+      // If there are no scores, the highest day streak is 0
+      console.log("No scores found. Highest day streak is 0.");
+      return 0;
+    }
+
+    const scoresByDay = new Map();
+
+    // Group scores by day
+    querySnapshot.forEach((doc) => {
+      const scoreData = doc.data();
+      const scoreDate = scoreData.date;
+
+      if (!scoresByDay.has(scoreDate)) {
+        scoresByDay.set(scoreDate, scoreData.score);
+      } else {
+        scoresByDay.set(scoreDate, scoresByDay.get(scoreDate) + scoreData.score);
+      }
+    });
+
+    // Sort the scores by date to ensure they are in chronological order
+    const sortedScoresByDay = new Map([...scoresByDay.entries()].sort());
+
+    let highestStreak = 0;
+    let currentStreak = 1;
+    let previousDate = null;
+
+    // Iterate through the groups and calculate streaks
+    for (const [date, score] of sortedScoresByDay) {
+      const currentDate = new Date(date);
+
+      if (!previousDate) {
+        // If this is the first date, set it as the previous date
+        previousDate = currentDate;
+      } else {
+        // Calculate the time difference in days
+        const timeDiff = Math.abs((currentDate - previousDate) / (1000 * 60 * 60 * 24));
+
+        if (timeDiff === 1) {
+          // If the scores are consecutive (within a 24-hour window), increment the streak
+          currentStreak++;
+        } else {
+          // If the current streak is higher than the highest streak, update it
+          if (currentStreak > highestStreak) {
+            highestStreak = currentStreak;
+          }
+          currentStreak = 1; // Reset the streak
+        }
+
+        previousDate = currentDate; // Update the previous date
+      }
+    }
+
+    // Compare the last streak to the highest streak
+    if (currentStreak > highestStreak) {
+      highestStreak = currentStreak;
+    }
+
+    console.log("Highest day streak calculated: " + highestStreak);
+
+    return highestStreak;
+  } catch (error) {
+    console.error("Error calculating highest day streak: " + error);
+    return 0;
+  }
+};
+
+
+
+
+
+
+
 
 
 
