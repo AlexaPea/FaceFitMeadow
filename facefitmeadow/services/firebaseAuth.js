@@ -6,7 +6,7 @@ import {createUserInDb} from "./firebaseDb";
 
 
 //Register a user
-export const registerNewUser = async (username, email, password, role) => {
+export const registerNewUser = async (username, email, password) => {
   try {
     // Register the user using the provided email and password
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -17,8 +17,7 @@ export const registerNewUser = async (username, email, password, role) => {
       displayName: username
     });
 
-    // Create the user in the database with the provided role
-    await createUserInDb(username, email, user.uid, role);
+    await createUserInDb(username, email, user.uid);
 
     // Update the display name in the authentication profile
     updateAuthProfile(username);
@@ -47,9 +46,7 @@ export const signInUser = (email, password) =>{
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode + ": " + errorMessage)
-        Alert.alert("Try again", "Error",[
-            {text: 'Try Again', onPress: () => {}}
-          ])
+
     });
 };
 

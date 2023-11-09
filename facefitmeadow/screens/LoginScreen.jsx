@@ -4,6 +4,8 @@ import React, { useState } from 'react'
 import * as Font from 'expo-font';
 import { globalStyles } from '../utils/GlobalStyles';
 import { signInUser } from '../services/firebaseAuth';
+import Icon from 'react-native-vector-icons/FontAwesome'; 
+
 
 const LoginScreen = ({ navigation }) => {
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -24,6 +26,8 @@ const LoginScreen = ({ navigation }) => {
       const  [email, setEmail] = useState('');
       const  [password, setPassword] = useState('');
       const  [loading, setLoading] = useState(false);
+      const [showPassword, setShowPassword] = useState(false);
+
   
 
       //logon function
@@ -37,12 +41,19 @@ const LoginScreen = ({ navigation }) => {
           setLoading(true);
           try {
             await signInUser(email, password);
-            // Successful login, navigate to the "home" tab
-            //navigation.navigate('HomeTab'); // Replace 'Home' with the actual name of your "home" tab
+            setLoading(true); // Successful login, loading stops
+            Alert.alert("Login Error", "Incorrect email or password. Please retry.", [
+              { text: 'Retry', onPress: () => setLoading(false) }
+            ]);
+            // navigation.navigate('HomeTab'); // Replace 'Home' with the actual name of your "home" tab
           } catch (error) {
             console.error('Login error:', error);
-            // Handle login error
-            // You can show an error message to the user
+          
+            // Show an error alert
+            console.log('Alert for login error is displayed'); // Add this line
+            Alert.alert("Login Error", "Incorrect email or password. Please retry.", [
+              { text: 'Retry', onPress: () => setLoading(false) }
+            ]);
           }
         }
       };
@@ -82,11 +93,15 @@ const LoginScreen = ({ navigation }) => {
             style={styles.input} 
             keyboardType='default'
             placeholderTextColor="#3E5F2A"
-            secureTextEntry={true} //makes entry secure so you can't see it
+            secureTextEntry={!showPassword} //makes entry secure so you can't see it
             placeholder='Password'
             defaultValue={password}    
             onChangeText={newValue => setPassword(newValue)}
             />
+
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}  style={styles.eye} >
+              <Icon name={showPassword ? 'eye' : 'eye-slash'} size={20} color="#3E5F2A" />
+            </TouchableOpacity>
         </View>
 
 {!loading ? (
@@ -222,5 +237,10 @@ btnTextTertiary:{
     width: 500,
     textAlign: 'center',
     paddingTop: 50,
+},
+eye:{
+  position:'absolute',
+top: 122,
+right: 120
 }
 });

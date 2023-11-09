@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import * as Font from 'expo-font';
 import { globalStyles } from '../utils/GlobalStyles';
 import { registerNewUser } from '../services/firebaseAuth';
+import Icon from 'react-native-vector-icons/FontAwesome'; 
 
 const RegisterScreen = ({ navigation }) => {
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -25,19 +26,31 @@ const RegisterScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
 
   const registerUser = async () => {
     console.log("Registering...");
   
-    try {
-      // Call the registration function, e.g., registerNewUser(username, email, password);
-      await registerNewUser(username, email, password);
+    if (!username || !email || !password) {
+      // Show an error alert if any of the fields are empty
+      Alert.alert("Registration Error", "Please fill in all fields.", [
+        { text: 'OK', onPress: () => setLoading(false) }
+      ]);
+    } else {
+      try {
+        // Call the registration function, e.g., registerNewUser(username, email, password);
+        await registerNewUser(username, email, password);
   
-      // If registration is successful, navigate to the OnboardingOne screen
-      navigation.navigate('OnboardingOne');
-    } catch (error) {
-      // Handle any registration errors here
-      console.error('Registration failed:', error);
+        // If registration is successful, navigate to the OnboardingOne screen
+        navigation.navigate('OnboardingOne');
+      } catch (error) {
+        // Handle any registration errors here
+        console.error('Registration failed:', error);
+        Alert.alert("Registration Error", "Registration failed. Please check your information and try again.", [
+          { text: 'OK', onPress: () => setLoading(false) }
+        ]);
+      }
     }
   };
 
@@ -54,7 +67,7 @@ const RegisterScreen = ({ navigation }) => {
     source={require('../assets/backgrounds/Login.png')}
     style={styles.backgroundImage}
   >
-<ScrollView>
+    <ScrollView>
 
         <View style={styles.logoContainer}>
                 <Image 
@@ -91,11 +104,15 @@ const RegisterScreen = ({ navigation }) => {
           style={styles.input} 
           keyboardType='default'
           placeholderTextColor="#3E5F2A"
-          secureTextEntry={true}
+          secureTextEntry={!showPassword}
           placeholder='Password'
           defaultValue={password}    
           onChangeText={newValue => setPassword(newValue)}
           />
+
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}  style={styles.eye} >
+              <Icon name={showPassword ? 'eye' : 'eye-slash'} size={20} color="#3E5F2A" />
+            </TouchableOpacity>
 
         </View>
 
@@ -232,5 +249,10 @@ btnTextTertiary:{
     width: 500,
     textAlign: 'center',
     paddingTop: 30,
+},
+eye:{
+  position:'absolute',
+  top: 210,
+  right: 120
 }
 });
