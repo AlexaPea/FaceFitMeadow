@@ -118,7 +118,7 @@ const HomeScreen = ({ navigation }) => {
           <>
             <Text style={styles.heading2}>Hello,</Text>
             <Text style={styles.heading1}>{displayName ? displayName : 'Newbie'}!</Text>
-            <Text style={styles.body}>Spot has missed you!</Text>
+            <Text style={styles.body}>{displayName ? 'Spot has missed you!' : 'Spot is so glad to meet you!'}</Text>
 
 
             <TouchableOpacity style={styles.logoutButton} onPress={signOutUser}>
